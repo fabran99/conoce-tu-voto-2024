@@ -144,7 +144,7 @@ export const validateQuestionPrompt = ChatPromptTemplate.fromMessages([
       "isValid": false // O true si lo fuera,
       "response": "El sistema esta pensado para responder sobre las elecciones en uruguay, por favor realiza una pregunta relacionada. Por ejemplo, puedes preguntar sobre las propuestas de un partido en particular, o comparar entre varios partidos."
     }}
-    No respondas con ningun otro texto, solo el json con las variaciones generadas.
+    No respondas con ningun otro texto, solo el json. Recuerda customizar la response, en caso de que corresponda, a la pregunta del usuario, por ejemplo si solo te pone 'Hola' o algo asi, no le respondas todo eso, saludalo e indicale como seguir.
 
     Tu respuesta:
     `,
