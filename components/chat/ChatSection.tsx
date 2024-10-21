@@ -60,28 +60,48 @@ export default function ChatSection() {
       chatHistory: chatHistory.messages,
       userQuery: userMessage,
       summary: chatHistory.summary?.toString() || "",
-    }).then((response) => {
-      // Add the response to the chat history
-      const newAIMessage: ChatMessage = {
-        date: new Date().toISOString(),
-        type: "ai",
-        content: response.response || "No se encontró respuesta",
-        references: (response.references as ChatReference[]) || [],
-      };
-      setChatHistory((prevChatHistory) => ({
-        ...prevChatHistory,
-        messages: [...prevChatHistory.messages, newAIMessage],
-        summary: response.summary || prevChatHistory.summary,
-      }));
+    })
+      .then((response) => {
+        // Add the response to the chat history
+        const newAIMessage: ChatMessage = {
+          date: new Date().toISOString(),
+          type: "ai",
+          content: response.response || "No se encontró respuesta",
+          references: (response.references as ChatReference[]) || [],
+        };
+        setChatHistory((prevChatHistory) => ({
+          ...prevChatHistory,
+          messages: [...prevChatHistory.messages, newAIMessage],
+          summary: response.summary || prevChatHistory.summary,
+        }));
 
-      setIsLoading(false);
-    });
+        setIsLoading(false);
+      })
+      .catch((e) => {
+        // Add a manual message to the chat history
+        const newAIMessage: ChatMessage = {
+          date: new Date().toISOString(),
+          type: "ai",
+          content:
+            "Hubo un error generando tu respuesta, por favor intenta de nuevo en unos segundos o realiza otra pregunta.",
+          references: [],
+        };
+        setChatHistory((prevChatHistory) => ({
+          ...prevChatHistory,
+          messages: [...prevChatHistory.messages, newAIMessage],
+        }));
+
+        setIsLoading(false);
+      });
   };
 
   return (
-    <section className="max-w-4xl mx-auto z-20 relative my-6">
-      <div className=" rounded-lg shadow-xl">
-        <div className="p-6 overflow-y-auto bg-white max-h-[85vh] min-h-[50vh]">
+    <section className="max-w-4xl mx-auto z-20 relative" id="chat">
+      <h2 className="text-3xl font-bold text-blue-600 mb-8 text-center">
+        Pregunta sobre las propuestas
+      </h2>
+      <div className=" rounded-lg shadow-xl overflow-hidden">
+        <div className="p-6 overflow-y-auto bg-white max-h-[70vh] min-h-[50vh]">
           <div className="space-y-4">
             {chatHistory.messages.map((message, index) => {
               const isLastMessage =
