@@ -94,7 +94,7 @@ export default function ChatSection() {
                 );
               } else {
                 return (
-                  <div ref={isLastMessage ? lastMessageRef : null}>
+                  <div ref={isLastMessage ? lastMessageRef : null} key={index}>
                     <AIMessage
                       chatReferences={message.references}
                       key={index}
