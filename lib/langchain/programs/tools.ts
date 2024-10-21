@@ -21,10 +21,10 @@ export const askVectorStore = async (
 
   const response = await vectorStoreHandler.getDocs({
     query,
-    k: 5,
-    multiQuery: 3,
+    k: 4,
+    multiQuery: 2,
     metadataFilter: {
-      party,
+      party: party || null,
       is_content: isContent,
     },
   });

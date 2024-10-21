@@ -1,7 +1,14 @@
 import { AgentExecutor, createToolCallingAgent } from "langchain/agents";
 import { mainModel, smallModel } from "./llms";
-import { questionAgentPrompt, enhanceQuestionPrompt } from "./prompts";
-import { StringOutputParser } from "@langchain/core/output_parsers";
+import {
+  questionAgentPrompt,
+  enhanceQuestionPrompt,
+  validateQuestionPrompt,
+} from "./prompts";
+import {
+  StringOutputParser,
+  JsonOutputParser,
+} from "@langchain/core/output_parsers";
 import { askVectorStoreTool } from "./programs/tools";
 import { ChatMessage } from "@/types/chat";
 import { traceable } from "langsmith/traceable";
@@ -31,6 +38,27 @@ export const chatWithQuestionAgent = async ({
     returnIntermediateSteps: true,
     maxIterations: 12,
   });
+
+  // Validate user query
+  try {
+    const validateChain = validateQuestionPrompt
+      .pipe(mainModel)
+      .pipe(new JsonOutputParser());
+    const validatedQuery = (await validateChain.invoke({
+      chatHistory,
+      userQuery,
+    })) as { isValid: boolean; response: string };
+
+    if (validatedQuery && !validatedQuery.isValid && validatedQuery.response) {
+      console.log(validatedQuery);
+      return {
+        response: validatedQuery.response,
+        references: [],
+      };
+    }
+  } catch (e) {
+    console.log(e);
+  }
 
   // Generate enhanced query
   const chain = enhanceQuestionPrompt
