@@ -1,7 +1,5 @@
 # ConoceTuVoto
 
-![ConoceTuVoto Logo](https://ConoceTuVoto.com/logo.png)
-
 **ConoceTuVoto** es una aplicación web que te permite consultar y comparar fácilmente las propuestas de los partidos políticos para las próximas elecciones en Uruguay. A través de una interfaz sencilla, puedes hacer preguntas específicas o generar comparativas entre diferentes partidos sobre temas que te interesan.
 
 ## Características
